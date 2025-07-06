@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="money-loggering-be/src/main/java"/>
+	<classpathentry kind="src" path="money-loggering-be/src/test/java"/>
+	<classpathentry kind="lib" path="money-loggering-be/build/libs/money-loggering-be-0.0.1-SNAPSHOT-plain.jar"/>
+	<classpathentry kind="lib" path="money-loggering-be/docker/money-loggering-be-0.0.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="money-loggering-be/gradle/wrapper/gradle-wrapper.jar"/>
+	<classpathentry kind="output" path="money-loggering-be/bin/main"/>
+</classpath>
