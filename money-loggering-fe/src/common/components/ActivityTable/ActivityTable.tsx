@@ -2,7 +2,7 @@ import { FC } from "react";
 import { StyledPaper } from "./styles";
 import TableHeader from "./subcomponents/TableHeader/TableHeader";
 import TableRow from "./subcomponents/TableRow/TableRow";
-import { TActivity } from "../../../views/Dashboard/types";
+import { TActivity } from "../../../redux/activityApi";
 
 interface TActivityProps {
   activityData: TActivity[];

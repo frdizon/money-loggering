@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { StyledPaper } from "./styles";
 import CategoryItem from "../CategoryItem/CategoryItem";
-import { TCategory } from "../../../../types";
+import { TCategory } from "../../../../../../redux/categoryApi";
 
 interface TCategoryListProps {
   categories: TCategory[];
