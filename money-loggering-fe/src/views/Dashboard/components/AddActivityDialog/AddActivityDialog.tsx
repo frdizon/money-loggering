@@ -14,41 +14,30 @@ import {
   StyledDialogContent,
   StyledSelectFormControl,
 } from "./styles";
-import useFormState from "../../../../common/hooks/useFormState";
-import { TActivity } from "../../types";
-import initializeActivityFormState from "./utils/initializeActivityFormState";
 import dayjs, { Dayjs } from "dayjs";
-import useGetCategoriesApi from "./utils/useGetCategoriesApi";
 import { THandleFormChangeEvent } from "./types";
-import usePostActivityApi from "./utils/usePostActivityApi";
+import useAddActivity from "./utils/useAddActivity";
+import { useGetCategoriesQuery } from "../../../../redux/categoryApi";
 
 interface TAddActivityDialogProps {
   isOpen: boolean;
   onDialogClose: () => void;
-  handleSuccess: () => void;
 }
 
 const AddActivityDialog: FC<TAddActivityDialogProps> = ({
   isOpen,
   onDialogClose,
-  handleSuccess,
 }) => {
   const { data: categoryData, isLoading: isLoadingCategory } =
-    useGetCategoriesApi();
+    useGetCategoriesQuery();
 
-  const { isLoading: isLoadingPostCategory, postActivity } =
-    usePostActivityApi();
-
-  const { formState, handleFormStateUpdate } = useFormState<
-    Omit<TActivity, "id">
-  >(initializeActivityFormState);
-
-  const handleAddActivity = useCallback(() => {
-    postActivity(formState).finally(() => {
-      handleSuccess();
-      onDialogClose();
-    });
-  }, [postActivity, formState, handleSuccess, onDialogClose]);
+  const {
+    formState,
+    handleFormStateUpdate,
+    isLoadingPostActivity,
+    onSubmit,
+    errorFieldsSet,
+  } = useAddActivity(onDialogClose);
 
   const handleFormChange = useCallback(
     (e: THandleFormChangeEvent) => {
@@ -59,7 +48,9 @@ const AddActivityDialog: FC<TAddActivityDialogProps> = ({
 
   const handleTimestampChange = useCallback(
     (datetimeVal: Dayjs | null) => {
-      handleFormStateUpdate({ timestamp: datetimeVal ?? dayjs() });
+      handleFormStateUpdate({
+        timestamp: (datetimeVal ?? dayjs()).toISOString(),
+      });
     },
     [handleFormStateUpdate]
   );
@@ -70,7 +61,7 @@ const AddActivityDialog: FC<TAddActivityDialogProps> = ({
       <StyledDialogContent>
         <StyledDateTimePicker
           label="Date and time of activity"
-          value={formState.timestamp}
+          value={dayjs(formState.timestamp)}
           name="timestamp"
           onChange={handleTimestampChange}
         />
@@ -85,8 +76,9 @@ const AddActivityDialog: FC<TAddActivityDialogProps> = ({
             label="Categpry"
             disabled={isLoadingCategory}
             required
+            error={errorFieldsSet.has("category")}
           >
-            {categoryData.map((category) => (
+            {(categoryData ?? []).map((category) => (
               <MenuItem key={category.id} value={category.id}>
                 {category.name}
               </MenuItem>
@@ -104,6 +96,7 @@ const AddActivityDialog: FC<TAddActivityDialogProps> = ({
           value={formState.name}
           onChange={handleFormChange}
           autoComplete="off"
+          error={errorFieldsSet.has("name")}
         />
         <TextField
           autoFocus
@@ -116,6 +109,7 @@ const AddActivityDialog: FC<TAddActivityDialogProps> = ({
           value={formState.amount}
           onChange={handleFormChange}
           autoComplete="off"
+          error={errorFieldsSet.has("amount")}
         />
       </StyledDialogContent>
       <DialogActions>
@@ -125,8 +119,8 @@ const AddActivityDialog: FC<TAddActivityDialogProps> = ({
         <Button
           type="submit"
           variant="contained"
-          onClick={handleAddActivity}
-          loading={isLoadingPostCategory}
+          onClick={onSubmit}
+          loading={isLoadingPostActivity}
         >
           Add activity
         </Button>

@@ -1,10 +1,9 @@
 import { Dialog, DialogContent } from "@mui/material";
-import { FC, useCallback } from "react";
+import { FC } from "react";
 import CategoryList from "./subcomponents/CategoryList/CategoryList";
 import AddCategory from "./subcomponents/AddCategory/AddCategory";
 import DialogTitleWithClose from "../../../../common/components/DialogTitleWithClose/DialogTitleWithClose";
-import useGetCategoriesApi from "../AddActivityDialog/utils/useGetCategoriesApi";
-import usePostCategoryApi from "../../utils/usePostCategoryApi";
+import { useGetCategoriesQuery } from "../../../../redux/categoryApi";
 
 interface TModifyCategoriesDialogProps {
   isOpen: boolean;
@@ -15,15 +14,7 @@ const ModifyCategoriesDialog: FC<TModifyCategoriesDialogProps> = ({
   isOpen,
   onDialogClose,
 }) => {
-  const { data, handleGetCategoryApi } = useGetCategoriesApi();
-  const { isLoading: isPostApiLoading, handlePostCategory } =
-    usePostCategoryApi();
-
-  const handleAddCategoryClick = useCallback(
-    (categoryName: string) =>
-      handlePostCategory(categoryName, handleGetCategoryApi),
-    [handlePostCategory, handleGetCategoryApi]
-  );
+  const { data } = useGetCategoriesQuery();
 
   return (
     <Dialog open={isOpen}>
@@ -31,11 +22,8 @@ const ModifyCategoriesDialog: FC<TModifyCategoriesDialogProps> = ({
         Categories
       </DialogTitleWithClose>
       <DialogContent>
-        <CategoryList categories={data} />
-        <AddCategory
-          onAddCategory={handleAddCategoryClick}
-          isButtonLoading={isPostApiLoading}
-        />
+        <CategoryList categories={data ?? []} />
+        <AddCategory />
       </DialogContent>
     </Dialog>
   );

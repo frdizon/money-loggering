@@ -1,28 +1,18 @@
-import { ChangeEvent, FC, useCallback, useState } from "react";
+import { ChangeEvent, FC, useCallback } from "react";
 import { Container, StyledButton, StyledTextField } from "./styles";
 import AddIcon from "@mui/icons-material/Add";
+import useAddCategory from "../../utils/useAddCategory";
 
-interface TAddCategoryProps {
-  onAddCategory: (categoryName: string) => void;
-  isButtonLoading: boolean;
-}
+const AddCategory: FC = () => {
+  const { isLoadingPostCategory, formState, handleFormStateUpdate, onSubmit } =
+    useAddCategory();
 
-const AddCategory: FC<TAddCategoryProps> = ({
-  onAddCategory,
-  isButtonLoading,
-}) => {
-  const [categoryName, setCategoryName] = useState("");
-
-  const handleCategoryNameChange = useCallback(
+  const handleFormChange = useCallback(
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      setCategoryName(e.target.value);
+      handleFormStateUpdate({ [e.target.name]: e.target.value });
     },
-    []
+    [handleFormStateUpdate]
   );
-
-  const handleAddCategory = useCallback(() => {
-    onAddCategory(categoryName);
-  }, [onAddCategory, categoryName]);
 
   return (
     <Container>
@@ -30,15 +20,16 @@ const AddCategory: FC<TAddCategoryProps> = ({
         label="Add category"
         variant="outlined"
         size="small"
-        value={categoryName}
-        onChange={handleCategoryNameChange}
+        name="name"
+        value={formState.name}
+        onChange={handleFormChange}
       />
       <StyledButton
         variant="contained"
-        loading={isButtonLoading}
+        loading={isLoadingPostCategory}
         startIcon={<AddIcon />}
-        onClick={handleAddCategory}
-        disabled={categoryName === ""}
+        onClick={onSubmit}
+        disabled={formState.name === ""}
       >
         Add
       </StyledButton>

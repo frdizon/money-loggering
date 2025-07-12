@@ -1,7 +1,8 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useCallback } from "react";
 import { AppBarContainer, Container, ContentContainer } from "./styles";
 import { Button } from "@mui/material";
-import useUser from "../../hooks/useUser";
+import useAppDispatch from "../../hooks/useAppDispatch";
+import { clear } from "../../../redux/authTokenSlice";
 
 interface TWithAppBarLayoutProps {
   menuComponent?: ReactNode;
@@ -12,13 +13,17 @@ const WithAppBarLayout: FC<TWithAppBarLayoutProps> = ({
   menuComponent = <div />,
   children,
 }) => {
-  const { onClearUserToken } = useUser();
+  const dispatch = useAppDispatch();
+
+  const handleLogout = useCallback(() => {
+    dispatch(clear());
+  }, [dispatch]);
 
   return (
     <Container>
       <AppBarContainer>
         {menuComponent}
-        <Button type="submit" variant="outlined" onClick={onClearUserToken}>
+        <Button type="submit" variant="outlined" onClick={handleLogout}>
           Logout
         </Button>
       </AppBarContainer>

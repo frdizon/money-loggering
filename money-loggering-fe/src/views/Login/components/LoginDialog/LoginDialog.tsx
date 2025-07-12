@@ -7,20 +7,18 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 import { IUser } from "../../types";
 import { StyledErrorText, StyledTextField } from "../../styles";
-import useLoginApi from "./utils/useLoginApi";
+import { useLazyLoginQuery } from "../../../../redux/loginApi";
 
 interface TLoginDialogProps {
   onOpenRegisterDialog?: () => void;
 }
 
 const LoginDialog: FC<TLoginDialogProps> = ({ onOpenRegisterDialog }) => {
-  const { onLogin, isLoading } = useLoginApi();
+  const [login, { isFetching, isError }] = useLazyLoginQuery();
   const [formData, setFormData] = useState<IUser>({
     username: "",
     password: "",
   });
-
-  const [isShownError] = useState(false);
 
   const handleFormChange = useCallback(
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -33,16 +31,14 @@ const LoginDialog: FC<TLoginDialogProps> = ({ onOpenRegisterDialog }) => {
   );
 
   const onLoginClick = useCallback(() => {
-    onLogin(formData);
-  }, [formData, onLogin]);
+    login(formData);
+  }, [formData, login]);
 
   return (
     <Dialog open>
       <DialogTitle>Login</DialogTitle>
       <DialogContent>
-        {isShownError && (
-          <StyledErrorText>Invalid Credentials.</StyledErrorText>
-        )}
+        {isError && <StyledErrorText>Invalid Credentials.</StyledErrorText>}
         <StyledTextField
           autoFocus
           fullWidth
@@ -50,7 +46,7 @@ const LoginDialog: FC<TLoginDialogProps> = ({ onOpenRegisterDialog }) => {
           label="Username"
           type="text"
           name="username"
-          variant="standard"
+          variant="outlined"
           onChange={handleFormChange}
           autoComplete="off"
         />
@@ -61,7 +57,7 @@ const LoginDialog: FC<TLoginDialogProps> = ({ onOpenRegisterDialog }) => {
           label="Password"
           name="password"
           type="password"
-          variant="standard"
+          variant="outlined"
           onChange={handleFormChange}
         />
       </DialogContent>
@@ -73,7 +69,7 @@ const LoginDialog: FC<TLoginDialogProps> = ({ onOpenRegisterDialog }) => {
           type="submit"
           variant="contained"
           onClick={onLoginClick}
-          loading={isLoading}
+          loading={isFetching}
         >
           Login
         </Button>

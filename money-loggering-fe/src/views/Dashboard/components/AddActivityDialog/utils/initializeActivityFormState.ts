@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
-import { TActivity } from "../../../types";
+import { TActivity } from "../../../../../redux/activityApi";
 
 const initializeActivityFormState = (): Omit<TActivity, "id"> => ({
-  timestamp: dayjs(),
+  timestamp: dayjs().toISOString(),
   name: "",
   amount: 0,
   category: "",
