@@ -1,5 +1,5 @@
-import { Paper } from "@mui/material";
 import styled from "styled-components";
+import Paper from "../Paper/styled";
 
 export const StyledPaper = styled(Paper)`
   height: 100%;

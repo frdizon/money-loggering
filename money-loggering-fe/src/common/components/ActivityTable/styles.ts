@@ -1,5 +1,5 @@
-import { Paper } from "@mui/material";
 import styled from "styled-components";
+import Paper from "../Paper/styled";
 
 export const StyledPaper = styled(Paper)`
   height: 100%;
@@ -13,6 +13,8 @@ export const TableRowBaseContainer = styled.div`
   align-items: center;
 
   height: 48px;
+  width: 100%;
+  min-width: 800px;
 
   > div:nth-child(1) {
     flex: 1;
