@@ -11,3 +11,10 @@ export const Container = styled.div`
   align-items: center;
   justify-content: space-between;
 `;
+
+export const TextContainer = styled.div`
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  flex: 1;
+`;

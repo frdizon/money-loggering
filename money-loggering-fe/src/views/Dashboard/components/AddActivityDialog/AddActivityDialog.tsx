@@ -65,7 +65,7 @@ const AddActivityDialog: FC<TAddActivityDialogProps> = ({
           name="timestamp"
           onChange={handleTimestampChange}
         />
-        <StyledSelectFormControl style={{ width: "350px" }}>
+        <StyledSelectFormControl>
           <InputLabel id="category-label">Category</InputLabel>
           <Select
             labelId="category-label"

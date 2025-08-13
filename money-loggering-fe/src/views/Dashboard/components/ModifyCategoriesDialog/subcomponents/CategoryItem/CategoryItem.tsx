@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Container } from "./styles";
+import { Container, TextContainer } from "./styles";
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -11,7 +11,7 @@ interface TCategoryItemProps {
 const CategoryItem: FC<TCategoryItemProps> = ({ name }) => {
   return (
     <Container>
-      {name}
+      <TextContainer>{name}</TextContainer>
       <div>
         <IconButton size="small" disabled>
           <EditIcon fontSize="small" />

@@ -18,6 +18,4 @@ export const StyledDialogContent = styled(DialogContent)`
   gap: 16px;
 `;
 
-export const StyledSelectFormControl = styled(FormControl)`
-  width: 350px;
-`;
+export const StyledSelectFormControl = styled(FormControl)``;

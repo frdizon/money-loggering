@@ -13,8 +13,6 @@ const CategoryList: FC<TCategoryListProps> = ({ categories }) => {
       {categories.map((category) => (
         <CategoryItem key={category.id} name={category.name} />
       ))}
-      {/* <CategoryItem name="Category 1" />
-      <CategoryItem name="Category 2" /> */}
     </StyledPaper>
   );
 };
