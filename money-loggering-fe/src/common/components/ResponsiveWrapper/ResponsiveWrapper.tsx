@@ -12,12 +12,15 @@ interface TResponsiveWrapperProps {
 const ResponsiveWrapper: FC<TResponsiveWrapperProps> = ({
   standardComponent,
   mobileComponent,
+  ...rest
 }) => (
   <>
-    <StyledStandardViewContainer>
+    <StyledStandardViewContainer {...rest}>
       {standardComponent}
     </StyledStandardViewContainer>
-    <StyledMobileViewContainer>{mobileComponent}</StyledMobileViewContainer>
+    <StyledMobileViewContainer {...rest}>
+      {mobileComponent}
+    </StyledMobileViewContainer>
   </>
 );
 

@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import Paper from "../Paper/styled";
+import Paper from "../../../../common/components/Paper/styled";
+import ResponsiveWrapper from "../../../../common/components/ResponsiveWrapper/ResponsiveWrapper";
 
 export const StyledPaper = styled(Paper)`
   height: 100%;
@@ -28,4 +29,8 @@ export const TableRowBaseContainer = styled.div`
   > div:nth-child(4) {
     flex: 1;
   }
+`;
+
+export const StyledResponsiveWrapper = styled(ResponsiveWrapper)`
+  height: 100%;
 `;

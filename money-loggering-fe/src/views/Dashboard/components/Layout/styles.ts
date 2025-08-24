@@ -10,7 +10,7 @@ export const Container = styled.div`
   > div {
     padding: 8px;
     @media (max-width: 768px) {
-      padding: 8px 0;
+      padding: 8px 0 0;
       border-radius: 0;
     }
   }

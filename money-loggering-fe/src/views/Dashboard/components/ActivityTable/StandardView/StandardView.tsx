@@ -2,13 +2,9 @@ import { FC } from "react";
 import { StyledPaper } from "./styles";
 import TableHeader from "./subcomponents/TableHeader/TableHeader";
 import TableRow from "./subcomponents/TableRow/TableRow";
-import { TActivity } from "../../../redux/activityApi";
+import { TActivityProps } from "../ActivityTable";
 
-interface TActivityProps {
-  activityData: TActivity[];
-}
-
-const ActivityTable: FC<TActivityProps> = ({ activityData }) => {
+const StandardView: FC<TActivityProps> = ({ activityData }) => {
   return (
     <StyledPaper>
       <TableHeader />
@@ -19,4 +15,4 @@ const ActivityTable: FC<TActivityProps> = ({ activityData }) => {
   );
 };
 
-export default ActivityTable;
+export default StandardView;

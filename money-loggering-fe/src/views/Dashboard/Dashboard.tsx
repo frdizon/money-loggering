@@ -1,6 +1,6 @@
 import { FC, useCallback, useMemo, useState } from "react";
 import WithAppBarLayout from "../../common/components/WithAppBarLayout/WithAppBarLayout";
-import ActivityTable from "../../common/components/ActivityTable/ActivityTable";
+import ActivityTable from "./components/ActivityTable/ActivityTable";
 import DashboardLayout from "./components/Layout/Layout";
 import SummaryGraph from "../../common/components/SummaryGraph/SummaryGraph";
 import AddActivityDialog from "./components/AddActivityDialog/AddActivityDialog";
