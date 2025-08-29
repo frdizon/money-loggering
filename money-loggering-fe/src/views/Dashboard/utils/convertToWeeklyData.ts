@@ -4,15 +4,16 @@ import { TActivity } from "../../../redux/activityApi";
 
 dayjs.extend(weekOfYear);
 
+// TODO: This logic should be handled on BE
 const convertToWeeklyData = (activities: TActivity[]) => {
   if (activities.length === 0) {
     return { weeklyDataArr: [], categoriesArr: [] };
   }
   // Initialize
-  const weeklyDataArr: Record<string, number>[] = [];
+  const weeklyDataArr: Record<string, string | number>[] = [];
   let weeklyIndexHolder = dayjs(activities[0].timestamp).week();
-  let weeklyDataHolder: Record<string, number> = {
-    week: dayjs(activities[0].timestamp).week(),
+  let weeklyDataHolder: Record<string, string | number> = {
+    week: dayjs(activities[0].timestamp).format("MMM D"),
   };
   const categoriesSet = new Set<string>();
 
@@ -20,11 +21,11 @@ const convertToWeeklyData = (activities: TActivity[]) => {
     if (dayjs(activity.timestamp).week() !== weeklyIndexHolder) {
       // Save week details then increment week index.
       weeklyDataArr.unshift(weeklyDataHolder);
-      weeklyDataHolder = { week: dayjs(activity.timestamp).week() };
+      weeklyDataHolder = { week: dayjs(activity.timestamp).format("MMM D") };
       weeklyIndexHolder = dayjs(activity.timestamp).week();
     }
     if (Object.keys(weeklyDataHolder).includes(activity.category)) {
-      weeklyDataHolder[activity.category] += activity.amount;
+      (weeklyDataHolder[activity.category] as number) += activity.amount;
     } else {
       weeklyDataHolder[activity.category] = activity.amount;
       categoriesSet.add(activity.category);

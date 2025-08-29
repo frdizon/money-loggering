@@ -3,7 +3,7 @@ import { StyledPaper } from "./styles";
 import { BarChart } from "@mui/x-charts";
 
 interface TSummaryGraphProps {
-  chartData: Record<string, number>[];
+  chartData: Record<string, string | number>[];
   categoriesList: string[];
 }
 
@@ -29,7 +29,7 @@ const SummaryGraph: FC<TSummaryGraphProps> = ({
         xAxis={[
           {
             dataKey: "week",
-            valueFormatter: (weekNum: number) => `Week ${weekNum}`,
+            valueFormatter: (week: string) => week,
           },
         ]}
         // yAxis={[{ width: 100 }]}
