@@ -7,6 +7,7 @@ import {
   RowBodyContainer,
   RowHeaderContainer,
 } from "./styles";
+import dayjs from "dayjs";
 
 interface TActivityRowProps {
   activity: TActivity;
@@ -16,7 +17,7 @@ const ActivityRow: FC<TActivityRowProps> = ({ activity }) => {
   return (
     <Container>
       <RowHeaderContainer>
-        <div>{activity.timestamp}</div>
+        <div>{dayjs(activity.timestamp).format("MM/DD/YYYY h:mm A")}</div>
         <div>{activity.category}</div>
       </RowHeaderContainer>
       <RowBodyContainer>
