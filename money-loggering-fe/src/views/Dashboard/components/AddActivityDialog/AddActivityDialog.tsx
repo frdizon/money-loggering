@@ -18,6 +18,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { THandleFormChangeEvent } from "./types";
 import useAddActivity from "./utils/useAddActivity";
 import { useGetCategoriesQuery } from "../../../../redux/categoryApi";
+import { TEXT_INPUT_ACTIVITY_SLOT_PROPS } from "../../constants";
 
 interface TAddActivityDialogProps {
   isOpen: boolean;
@@ -94,6 +95,7 @@ const AddActivityDialog: FC<TAddActivityDialogProps> = ({
           type="text"
           variant="outlined"
           value={formState.name}
+          slotProps={TEXT_INPUT_ACTIVITY_SLOT_PROPS}
           onChange={handleFormChange}
           autoComplete="off"
           error={errorFieldsSet.has("name")}

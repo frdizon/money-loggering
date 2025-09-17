@@ -8,6 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { IUser } from "../../types";
 import { StyledErrorText, StyledTextField } from "../../styles";
 import { useLazyLoginQuery } from "../../../../redux/loginApi";
+import { TEXT_INPUT_SLOT_PROPS } from "../../constants";
 
 interface TLoginDialogProps {
   onOpenRegisterDialog?: () => void;
@@ -49,6 +50,7 @@ const LoginDialog: FC<TLoginDialogProps> = ({ onOpenRegisterDialog }) => {
           variant="outlined"
           onChange={handleFormChange}
           autoComplete="off"
+          slotProps={TEXT_INPUT_SLOT_PROPS}
         />
         <StyledTextField
           autoFocus
@@ -59,6 +61,7 @@ const LoginDialog: FC<TLoginDialogProps> = ({ onOpenRegisterDialog }) => {
           type="password"
           variant="outlined"
           onChange={handleFormChange}
+          slotProps={TEXT_INPUT_SLOT_PROPS}
         />
       </DialogContent>
       <DialogActions>
