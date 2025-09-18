@@ -18,12 +18,14 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 25)
     private String name;
 
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
+
+
 
     public Category() {
     }
