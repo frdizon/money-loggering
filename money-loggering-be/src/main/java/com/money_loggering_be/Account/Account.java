@@ -20,6 +20,13 @@ public class Account {
     @Column(nullable = false)
     private String password;
 
+    public Account () {
+    }
+
+    public Account (Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

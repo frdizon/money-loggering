@@ -10,11 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/category")
@@ -46,6 +42,25 @@ public class CategoryController {
             } else {
                 return ResponseEntity.badRequest().build();
             }
+        }
+        return ResponseEntity.status(401).build();
+    }
+
+    @PutMapping("/{categoryId}")
+    private ResponseEntity<Void> putCategory(
+            Authentication authentication,
+            @PathVariable Long categoryId,
+            @RequestBody CategoryDTO categoryDTO){
+        Optional<Account> account = accountRepository.findById(Long.parseLong(authentication.getName()));
+        if (account.isPresent() &&
+                categoryRepository.existsByIdAndAccountId(categoryId, Long.parseLong(authentication.getName()))){
+            Category updatedCategory = new Category(
+                categoryId,
+                account.get(),
+                categoryDTO.getName()
+            );
+            categoryRepository.save(updatedCategory);
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.status(401).build();
     }

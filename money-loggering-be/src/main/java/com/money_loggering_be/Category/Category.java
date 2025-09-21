@@ -39,6 +39,12 @@ public class Category {
         this.account = account;
     }
 
+    public Category(Long id, Account account, String name) {
+        this.id = id;
+        this.name = name;
+        this.account = account;
+    }
+
     public Long getId() {
         return id;
     }
