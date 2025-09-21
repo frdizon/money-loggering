@@ -28,7 +28,8 @@ public class ActivityController {
     };
 
     @PostMapping
-    private ResponseEntity<Void> createActivity(Authentication authentication,
+    private ResponseEntity<Void> createActivity(
+            Authentication authentication,
             @RequestBody ActivityCreateDTO activityCreateDTO) {
         List<Category> userCategories = categoryRepository.findByAccountId(Long.parseLong(authentication.getName()));
         // @formatter:off
@@ -44,6 +45,34 @@ public class ActivityController {
             activityRepository.save(newActivity);
             return ResponseEntity.status(201).build();
         }
+        return ResponseEntity.status(403).build();
+    }
+
+    @PutMapping("/{activityId}")
+    private ResponseEntity<Void> putActivity(
+            Authentication authentication,
+            @PathVariable Long activityId,
+            @RequestBody ActivityCreateDTO activityDTO) {
+        if (activityRepository.existsByIdAndAccountId(Long.parseLong(authentication.getName()), activityId)){
+            Activity updatedActivity = new Activity(
+                    activityId,
+                    activityDTO.getActivity(),
+                    activityDTO.getTimestamp(),
+                    activityDTO.getAmount(),
+                    new Category(activityDTO.getCategoryId())
+            );
+            activityRepository.save(updatedActivity);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.status(403).build();
+    }
+
+    @DeleteMapping("/{activityId}")
+    private ResponseEntity<Void> deleteActivity(Authentication authentication, @PathVariable Long activityId) {
+         if (activityRepository.existsByIdAndAccountId(Long.parseLong(authentication.getName()), activityId)){
+             activityRepository.deleteById(activityId);
+             return ResponseEntity.noContent().build();
+         }
         return ResponseEntity.status(403).build();
     }
 }

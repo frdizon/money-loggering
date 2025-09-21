@@ -26,6 +26,8 @@ public class Activity {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    public Activity(){};
+
     public Activity(Long id, String name, LocalDateTime timestamp, double amount, Category category) {
         this.id = id;
         this.name = name;
