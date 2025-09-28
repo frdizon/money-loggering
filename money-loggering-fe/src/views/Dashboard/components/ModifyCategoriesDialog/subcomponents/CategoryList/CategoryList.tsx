@@ -28,10 +28,10 @@ const CategoryList: FC<TCategoryListProps> = ({ categories }) => {
       {categories.map((category) => (
         <CategoryItem
           key={category.id}
-          name={category.name}
+          category={category}
           isEditing={category.id === itemToEditId}
-          onEditClick={handleEditButtonClicked(category.id)}
-          onCancelEdit={handleCancelEdit}
+          onExpandEditView={handleEditButtonClicked(category.id)}
+          onCollapseEditView={handleCancelEdit}
         />
       ))}
     </StyledPaper>

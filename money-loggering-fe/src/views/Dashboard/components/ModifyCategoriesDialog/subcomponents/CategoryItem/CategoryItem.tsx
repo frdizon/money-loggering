@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useCallback, useState } from "react";
+import { ChangeEvent, FC, useCallback } from "react";
 import {
   Container,
   StyledButton,
@@ -9,28 +9,39 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
+import { TCategory } from "../../../../../../redux/categoryApi";
+import usePostCategory from "../../utils/usePostCategory";
 
 interface TCategoryItemProps {
-  name: string;
+  category: TCategory;
   isEditing: boolean;
-  onEditClick: () => void;
-  onCancelEdit: () => void;
+  /** Callback function to expand/show the edit view */
+  onExpandEditView: () => void;
+  /** Callback function to collapse/hide the edit view */
+  onCollapseEditView: () => void;
 }
 
 const CategoryItem: FC<TCategoryItemProps> = ({
-  name,
+  category,
   isEditing,
-  onEditClick,
-  onCancelEdit,
+  onExpandEditView,
+  onCollapseEditView,
 }) => {
-  const [editedValue, setEditedValue] = useState(name);
+  const { formState, handleFormStateUpdate, isLoadingPutCategory, onSubmit } =
+    usePostCategory(category);
 
   const handleEditValueChange = useCallback(
     (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      setEditedValue(evt.target.value);
+      handleFormStateUpdate({ name: evt.target.value });
     },
-    []
+    [handleFormStateUpdate]
   );
+
+  const handleEditSave = useCallback(() => {
+    onSubmit()?.then(() => {
+      onCollapseEditView();
+    });
+  }, [onCollapseEditView, onSubmit]);
 
   if (isEditing) {
     return (
@@ -40,18 +51,19 @@ const CategoryItem: FC<TCategoryItemProps> = ({
           label="New category name"
           variant="standard"
           size="small"
-          defaultValue={name}
+          defaultValue={category.name}
           fullWidth
           onChange={handleEditValueChange}
         />
         <StyledRowFlexContainer gap={8}>
-          <StyledButton variant="outlined" onClick={onCancelEdit}>
+          <StyledButton variant="outlined" onClick={onCollapseEditView}>
             Cancel
           </StyledButton>
           <StyledButton
             variant="contained"
-            disabled={name === editedValue}
-            onClick={() => {}}
+            disabled={category.name === formState.name}
+            loading={isLoadingPutCategory}
+            onClick={handleEditSave}
           >
             Save
           </StyledButton>
@@ -64,9 +76,9 @@ const CategoryItem: FC<TCategoryItemProps> = ({
   return (
     <Container>
       <StyledRowFlexContainer>
-        <TextContainer>{name}</TextContainer>
+        <TextContainer>{category.name}</TextContainer>
         <div>
-          <IconButton size="small" onClick={onEditClick}>
+          <IconButton size="small" onClick={onExpandEditView}>
             <EditIcon fontSize="small" />
           </IconButton>
           <IconButton size="small" disabled>

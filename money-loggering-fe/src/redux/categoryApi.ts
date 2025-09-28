@@ -35,7 +35,19 @@ export const categoryApi = createApi({
       }),
       invalidatesTags: ["category"],
     }),
+    putCategory: builder.mutation<void, TCategory>({
+      query: (requestBody) => ({
+        url: `${requestBody.id}`,
+        method: "PUT",
+        body: { name: requestBody.name },
+      }),
+      invalidatesTags: ["category"],
+    }),
   }),
 });
 
-export const { useGetCategoriesQuery, usePostCategoryMutation } = categoryApi;
+export const {
+  useGetCategoriesQuery,
+  usePostCategoryMutation,
+  usePutCategoryMutation,
+} = categoryApi;
