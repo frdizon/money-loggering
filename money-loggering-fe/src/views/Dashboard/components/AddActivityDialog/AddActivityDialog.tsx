@@ -1,8 +1,8 @@
 import {
   Button,
   Dialog,
-  DialogActions,
   DialogTitle,
+  FormControl,
   InputLabel,
   MenuItem,
   Select,
@@ -12,7 +12,7 @@ import { FC, useCallback } from "react";
 import {
   StyledDateTimePicker,
   StyledDialogContent,
-  StyledSelectFormControl,
+  StyledDialogActions,
 } from "./styles";
 import dayjs, { Dayjs } from "dayjs";
 import { THandleFormChangeEvent } from "./types";
@@ -66,7 +66,7 @@ const AddActivityDialog: FC<TAddActivityDialogProps> = ({
           name="timestamp"
           onChange={handleTimestampChange}
         />
-        <StyledSelectFormControl>
+        <FormControl>
           <InputLabel id="category-label">Category</InputLabel>
           <Select
             labelId="category-label"
@@ -85,7 +85,7 @@ const AddActivityDialog: FC<TAddActivityDialogProps> = ({
               </MenuItem>
             ))}
           </Select>
-        </StyledSelectFormControl>
+        </FormControl>
         <TextField
           autoFocus
           fullWidth
@@ -114,7 +114,7 @@ const AddActivityDialog: FC<TAddActivityDialogProps> = ({
           error={errorFieldsSet.has("amount")}
         />
       </StyledDialogContent>
-      <DialogActions>
+      <StyledDialogActions>
         <Button type="submit" onClick={onDialogClose}>
           Cancel
         </Button>
@@ -126,7 +126,7 @@ const AddActivityDialog: FC<TAddActivityDialogProps> = ({
         >
           Add activity
         </Button>
-      </DialogActions>
+      </StyledDialogActions>
     </Dialog>
   );
 };
