@@ -8,6 +8,7 @@ export interface TActivity {
   category: string;
   name: string;
   amount: number;
+  categoryid: number;
 }
 
 export const activityApi = createApi({
@@ -53,7 +54,24 @@ export const activityApi = createApi({
       }),
       invalidatesTags: ["activity"],
     }),
+    putActivity: builder.mutation<void, TActivity>({
+      query: (requestBody) => ({
+        url: `${requestBody.id}`,
+        method: "PUT",
+        body: {
+          timestamp: requestBody.timestamp,
+          activity: requestBody.name,
+          categoryId: requestBody.categoryid,
+          amount: requestBody.amount,
+        },
+      }),
+      invalidatesTags: ["activity"],
+    }),
   }),
 });
 
-export const { useGetActivitiesQuery, usePostActivityMutation } = activityApi;
+export const {
+  useGetActivitiesQuery,
+  usePostActivityMutation,
+  usePutActivityMutation,
+} = activityApi;

@@ -5,15 +5,33 @@ import StandardView from "./StandardView/StandardView";
 import MobileView from "./MobileView/MobileView";
 import { StyledResponsiveWrapper } from "./styles";
 
-export interface TActivityProps {
+export interface TActivityTableProps {
   activityData: TActivity[];
 }
 
-const ActivityTable: FC<TActivityProps> = ({ activityData }) => {
+export interface TActivityProps {
+  activityData: TActivity[];
+  onEditActivity: (activity: TActivity) => void;
+}
+
+const ActivityTable: FC<TActivityProps> = ({
+  activityData,
+  onEditActivity,
+}) => {
   return (
     <StyledResponsiveWrapper
-      standardComponent={<StandardView activityData={activityData} />}
-      mobileComponent={<MobileView activityData={activityData} />}
+      standardComponent={
+        <StandardView
+          activityData={activityData}
+          onEditActivity={onEditActivity}
+        />
+      }
+      mobileComponent={
+        <MobileView
+          activityData={activityData}
+          onEditActivity={onEditActivity}
+        />
+      }
     />
   );
 };

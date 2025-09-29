@@ -11,23 +11,26 @@ import {
 import { FC, useCallback } from "react";
 import {
   StyledDateTimePicker,
-  StyledDialogContent,
   StyledDialogActions,
-} from "./styles";
+  StyledDialogContent,
+} from "../AddActivityDialog/styles";
 import dayjs, { Dayjs } from "dayjs";
-import { THandleFormChangeEvent } from "./types";
-import useAddActivity from "./utils/useAddActivity";
 import { useGetCategoriesQuery } from "../../../../redux/categoryApi";
+import { TActivity } from "../../../../redux/activityApi";
+import useEditActivity from "./utils/useEditActivity";
+import { THandleFormChangeEvent } from "../AddActivityDialog/types";
 import { TEXT_INPUT_ACTIVITY_SLOT_PROPS } from "../../constants";
 
-interface TAddActivityDialogProps {
+interface TEditActivityDialogProps {
   isOpen: boolean;
   onDialogClose: () => void;
+  activity: TActivity;
 }
 
-const AddActivityDialog: FC<TAddActivityDialogProps> = ({
+const EditActivityDialog: FC<TEditActivityDialogProps> = ({
   isOpen,
   onDialogClose,
+  activity,
 }) => {
   const { data: categoryData, isLoading: isLoadingCategory } =
     useGetCategoriesQuery();
@@ -35,10 +38,10 @@ const AddActivityDialog: FC<TAddActivityDialogProps> = ({
   const {
     formState,
     handleFormStateUpdate,
-    isLoadingPostActivity,
+    isLoadingPutActivity,
     onSubmit,
     errorFieldsSet,
-  } = useAddActivity(onDialogClose);
+  } = useEditActivity(activity);
 
   const handleFormChange = useCallback(
     (e: THandleFormChangeEvent) => {
@@ -56,9 +59,15 @@ const AddActivityDialog: FC<TAddActivityDialogProps> = ({
     [handleFormStateUpdate]
   );
 
+  const handleSaveClick = useCallback(() => {
+    onSubmit()?.then(() => {
+      onDialogClose();
+    });
+  }, [onDialogClose, onSubmit]);
+
   return (
     <Dialog open={isOpen}>
-      <DialogTitle>Add activity</DialogTitle>
+      <DialogTitle>Edit activity</DialogTitle>
       <StyledDialogContent>
         <StyledDateTimePicker
           label="Date and time of activity"
@@ -71,8 +80,8 @@ const AddActivityDialog: FC<TAddActivityDialogProps> = ({
           <Select
             labelId="category-label"
             id="category-label"
-            name="category"
-            value={formState.category}
+            name="categoryid"
+            value={formState.categoryid}
             onChange={handleFormChange}
             label="Category"
             disabled={isLoadingCategory}
@@ -116,19 +125,22 @@ const AddActivityDialog: FC<TAddActivityDialogProps> = ({
       </StyledDialogContent>
       <StyledDialogActions>
         <Button type="submit" onClick={onDialogClose}>
+          Delete
+        </Button>
+        <Button type="submit" onClick={onDialogClose}>
           Cancel
         </Button>
         <Button
           type="submit"
           variant="contained"
-          onClick={onSubmit}
-          loading={isLoadingPostActivity}
+          onClick={handleSaveClick}
+          loading={isLoadingPutActivity}
         >
-          Add activity
+          Save
         </Button>
       </StyledDialogActions>
     </Dialog>
   );
 };
 
-export default AddActivityDialog;
+export default EditActivityDialog;

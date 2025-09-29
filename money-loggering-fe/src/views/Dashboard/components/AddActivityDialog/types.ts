@@ -3,4 +3,4 @@ import { ChangeEvent } from "react";
 
 export type THandleFormChangeEvent =
   | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  | SelectChangeEvent<string>;
+  | SelectChangeEvent<string | number>;
