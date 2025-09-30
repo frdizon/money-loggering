@@ -3,6 +3,7 @@ import { TableRowBaseContainer } from "../../styles";
 
 export const Container = styled(TableRowBaseContainer)`
   border-bottom: 1px solid gray;
+  cursor: pointer;
 
   &:hover {
     background-color: #141414;

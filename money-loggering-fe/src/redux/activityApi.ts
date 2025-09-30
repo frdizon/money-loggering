@@ -67,6 +67,13 @@ export const activityApi = createApi({
       }),
       invalidatesTags: ["activity"],
     }),
+    deleteActivity: builder.mutation<void, number>({
+      query: (activityId) => ({
+        url: `${activityId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["activity"],
+    }),
   }),
 });
 
@@ -74,4 +81,5 @@ export const {
   useGetActivitiesQuery,
   usePostActivityMutation,
   usePutActivityMutation,
+  useDeleteActivityMutation,
 } = activityApi;

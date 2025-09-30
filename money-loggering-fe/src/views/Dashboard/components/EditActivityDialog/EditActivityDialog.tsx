@@ -9,17 +9,19 @@ import {
   TextField,
 } from "@mui/material";
 import { FC, useCallback } from "react";
-import {
-  StyledDateTimePicker,
-  StyledDialogActions,
-  StyledDialogContent,
-} from "../AddActivityDialog/styles";
+import { CancelSaveButtonsContainer, StyledDialogActions } from "./styles";
 import dayjs, { Dayjs } from "dayjs";
 import { useGetCategoriesQuery } from "../../../../redux/categoryApi";
 import { TActivity } from "../../../../redux/activityApi";
 import useEditActivity from "./utils/useEditActivity";
 import { THandleFormChangeEvent } from "../AddActivityDialog/types";
 import { TEXT_INPUT_ACTIVITY_SLOT_PROPS } from "../../constants";
+import {
+  StyledDateTimePicker,
+  StyledDialogContent,
+} from "../AddActivityDialog/styles";
+import useDeleteActivity from "./utils/useDeleteActivity";
+import DeleteConfirmation from "./subcomponents/DeleteConfirmation/DeleteConfirmation";
 
 interface TEditActivityDialogProps {
   isOpen: boolean;
@@ -43,6 +45,14 @@ const EditActivityDialog: FC<TEditActivityDialogProps> = ({
     errorFieldsSet,
   } = useEditActivity(activity);
 
+  const {
+    onDisplayDeleteConfirmation,
+    isDeleteWarningShown,
+    onDeleteCancel,
+    onDelete,
+    isDeleteLoading,
+  } = useDeleteActivity(activity.id, onDialogClose);
+
   const handleFormChange = useCallback(
     (e: THandleFormChangeEvent) => {
       handleFormStateUpdate({ [e.target.name]: e.target.value });
@@ -64,6 +74,18 @@ const EditActivityDialog: FC<TEditActivityDialogProps> = ({
       onDialogClose();
     });
   }, [onDialogClose, onSubmit]);
+
+  if (isDeleteWarningShown) {
+    return (
+      <Dialog open={isOpen}>
+        <DeleteConfirmation
+          onCancel={onDeleteCancel}
+          onDelete={onDelete}
+          isDeleteLoading={isDeleteLoading}
+        />
+      </Dialog>
+    );
+  }
 
   return (
     <Dialog open={isOpen}>
@@ -124,20 +146,26 @@ const EditActivityDialog: FC<TEditActivityDialogProps> = ({
         />
       </StyledDialogContent>
       <StyledDialogActions>
-        <Button type="submit" onClick={onDialogClose}>
-          Delete
-        </Button>
-        <Button type="submit" onClick={onDialogClose}>
-          Cancel
-        </Button>
         <Button
           type="submit"
-          variant="contained"
-          onClick={handleSaveClick}
-          loading={isLoadingPutActivity}
+          color="error"
+          onClick={onDisplayDeleteConfirmation}
         >
-          Save
+          Delete
         </Button>
+        <CancelSaveButtonsContainer>
+          <Button type="submit" onClick={onDialogClose}>
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            variant="contained"
+            onClick={handleSaveClick}
+            loading={isLoadingPutActivity}
+          >
+            Save
+          </Button>
+        </CancelSaveButtonsContainer>
       </StyledDialogActions>
     </Dialog>
   );
