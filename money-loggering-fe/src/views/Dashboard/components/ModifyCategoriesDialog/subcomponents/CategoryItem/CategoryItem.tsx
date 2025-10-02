@@ -11,6 +11,7 @@ import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import { TCategory } from "../../../../../../redux/categoryApi";
 import usePostCategory from "../../utils/usePostCategory";
+import { TEXT_INPUT_CATEGORY_SLOT_PROPS } from "../../../../constants";
 
 interface TCategoryItemProps {
   category: TCategory;
@@ -54,6 +55,7 @@ const CategoryItem: FC<TCategoryItemProps> = ({
           defaultValue={category.name}
           fullWidth
           onChange={handleEditValueChange}
+          slotProps={TEXT_INPUT_CATEGORY_SLOT_PROPS}
         />
         <StyledRowFlexContainer gap={8}>
           <StyledButton variant="outlined" onClick={onCollapseEditView}>
