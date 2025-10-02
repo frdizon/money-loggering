@@ -6,6 +6,7 @@ const initializeActivityFormState = (): Omit<TActivity, "id"> => ({
   name: "",
   amount: 0,
   category: "",
+  categoryid: 0,
 });
 
 export default initializeActivityFormState;
