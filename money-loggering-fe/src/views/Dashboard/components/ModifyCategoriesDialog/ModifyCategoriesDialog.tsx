@@ -1,9 +1,11 @@
 import { Dialog, DialogContent } from "@mui/material";
-import { FC } from "react";
+import { FC, useCallback } from "react";
 import CategoryList from "./subcomponents/CategoryList/CategoryList";
 import AddCategory from "./subcomponents/AddCategory/AddCategory";
 import DialogTitleWithClose from "../../../../common/components/DialogTitleWithClose/DialogTitleWithClose";
 import { useGetCategoriesQuery } from "../../../../redux/categoryApi";
+import { useDispatch } from "react-redux";
+import { activityApi } from "../../../../redux/activityApi";
 
 interface TModifyCategoriesDialogProps {
   isOpen: boolean;
@@ -15,10 +17,17 @@ const ModifyCategoriesDialog: FC<TModifyCategoriesDialogProps> = ({
   onDialogClose,
 }) => {
   const { data } = useGetCategoriesQuery();
+  const dispatch = useDispatch();
+
+  const handleCloseDialog = useCallback(() => {
+    // TODO: Only invalidateTags when an edit has been made
+    dispatch(activityApi.util.invalidateTags(["activity"]));
+    onDialogClose();
+  }, [dispatch, onDialogClose]);
 
   return (
     <Dialog open={isOpen}>
-      <DialogTitleWithClose onClose={onDialogClose}>
+      <DialogTitleWithClose onClose={handleCloseDialog}>
         Categories
       </DialogTitleWithClose>
       <DialogContent>

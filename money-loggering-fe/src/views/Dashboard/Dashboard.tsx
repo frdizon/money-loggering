@@ -9,10 +9,14 @@ import convertToWeeklyData from "./utils/convertToWeeklyData";
 import AppbarButtons from "./components/AppbarButtons/AppbarButtons";
 import ModifyCategoriesDialog from "./components/ModifyCategoriesDialog/ModifyCategoriesDialog";
 import ModifyQueryDialog from "./components/ModifyQueryDialog/ModifyQueryDialog";
-import { useGetActivitiesQuery } from "../../redux/activityApi";
+import { TActivity, useGetActivitiesQuery } from "../../redux/activityApi";
+import EditActivityDialog from "./components/EditActivityDialog/EditActivityDialog";
 
 const Dashboard: FC = () => {
   const [shownDialog, setShownDialog] = useState<TShownDashboardDialog>("");
+  const [activityToBeEdited, setActivityToBeEdited] = useState<
+    undefined | TActivity
+  >(undefined);
 
   const handleSetShownDialog = useCallback(
     (shownDialog: TShownDashboardDialog) => {
@@ -21,8 +25,14 @@ const Dashboard: FC = () => {
     []
   );
 
+  const handleShowEditDialog = useCallback((activity: TActivity) => {
+    setActivityToBeEdited(activity);
+    setShownDialog("edit-activity");
+  }, []);
+
   const handleHideDialog = useCallback(() => {
     setShownDialog("");
+    setActivityToBeEdited(undefined);
   }, []);
 
   const { data } = useGetActivitiesQuery();
@@ -44,7 +54,12 @@ const Dashboard: FC = () => {
               categoriesList={categoriesArr}
             />
           }
-          tableComponent={<ActivityTable activityData={data ?? []} />}
+          tableComponent={
+            <ActivityTable
+              activityData={data ?? []}
+              onEditActivity={handleShowEditDialog}
+            />
+          }
         />
       </WithAppBarLayout>
       {/* Dashboard Dialogs here */}
@@ -52,6 +67,13 @@ const Dashboard: FC = () => {
         isOpen={shownDialog === "add-activity"}
         onDialogClose={handleHideDialog}
       />
+      {activityToBeEdited && (
+        <EditActivityDialog
+          isOpen={shownDialog === "edit-activity"}
+          onDialogClose={handleHideDialog}
+          activity={activityToBeEdited}
+        />
+      )}
       <ModifyCategoriesDialog
         isOpen={shownDialog === "modify-categories"}
         onDialogClose={handleHideDialog}

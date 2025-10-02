@@ -3,11 +3,15 @@ import { TActivityProps } from "../ActivityTable";
 import { StyledPaper } from "./styles";
 import ActivityRow from "./subcomponents/ActivityRow/ActivityRow";
 
-const MobileView: FC<TActivityProps> = ({ activityData }) => {
+const MobileView: FC<TActivityProps> = ({ activityData, onEditActivity }) => {
   return (
     <StyledPaper>
       {activityData.map((activityItem) => (
-        <ActivityRow key={activityItem.id} activity={activityItem} />
+        <ActivityRow
+          key={activityItem.id}
+          activity={activityItem}
+          onClick={onEditActivity}
+        />
       ))}
     </StyledPaper>
   );

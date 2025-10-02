@@ -2,7 +2,6 @@ import Button from "@mui/material/Button";
 import styled, { keyframes } from "styled-components";
 
 export const Container = styled.div<{ isExpanded?: boolean }>`
-  // height: fit-content;
   height: ${({ isExpanded }) => (isExpanded ? 97 : 44)}px;
   width: 100%;
   border: 1px solid #90caf9;

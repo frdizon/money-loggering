@@ -1,4 +1,4 @@
-import { DialogContent, FormControl } from "@mui/material";
+import { DialogActions, DialogContent } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import styled from "styled-components";
 
@@ -18,4 +18,6 @@ export const StyledDialogContent = styled(DialogContent)`
   gap: 16px;
 `;
 
-export const StyledSelectFormControl = styled(FormControl)``;
+export const StyledDialogActions = styled(DialogActions)`
+  padding: 0 24px 8px;
+`;

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useCallback } from "react";
 import { TActivity } from "../../../../../../../redux/activityApi";
 import {
   AmountContainer,
@@ -11,11 +11,16 @@ import dayjs from "dayjs";
 
 interface TActivityRowProps {
   activity: TActivity;
+  onClick: (activityToBeEdited: TActivity) => void;
 }
 
-const ActivityRow: FC<TActivityRowProps> = ({ activity }) => {
+const ActivityRow: FC<TActivityRowProps> = ({ activity, onClick }) => {
+  const handleClick = useCallback(() => {
+    onClick(activity);
+  }, [activity, onClick]);
+
   return (
-    <Container>
+    <Container onClick={handleClick}>
       <RowHeaderContainer>
         <div>{dayjs(activity.timestamp).format("MM/DD/YYYY h:mm A")}</div>
         <div>{activity.category}</div>

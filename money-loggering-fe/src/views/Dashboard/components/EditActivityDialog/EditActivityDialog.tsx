@@ -9,25 +9,30 @@ import {
   TextField,
 } from "@mui/material";
 import { FC, useCallback } from "react";
+import { CancelSaveButtonsContainer, StyledDialogActions } from "./styles";
+import dayjs, { Dayjs } from "dayjs";
+import { useGetCategoriesQuery } from "../../../../redux/categoryApi";
+import { TActivity } from "../../../../redux/activityApi";
+import useEditActivity from "./utils/useEditActivity";
+import { THandleFormChangeEvent } from "../AddActivityDialog/types";
+import { TEXT_INPUT_ACTIVITY_SLOT_PROPS } from "../../constants";
 import {
   StyledDateTimePicker,
   StyledDialogContent,
-  StyledDialogActions,
-} from "./styles";
-import dayjs, { Dayjs } from "dayjs";
-import { THandleFormChangeEvent } from "./types";
-import useAddActivity from "./utils/useAddActivity";
-import { useGetCategoriesQuery } from "../../../../redux/categoryApi";
-import { TEXT_INPUT_ACTIVITY_SLOT_PROPS } from "../../constants";
+} from "../AddActivityDialog/styles";
+import useDeleteActivity from "./utils/useDeleteActivity";
+import DeleteConfirmation from "./subcomponents/DeleteConfirmation/DeleteConfirmation";
 
-interface TAddActivityDialogProps {
+interface TEditActivityDialogProps {
   isOpen: boolean;
   onDialogClose: () => void;
+  activity: TActivity;
 }
 
-const AddActivityDialog: FC<TAddActivityDialogProps> = ({
+const EditActivityDialog: FC<TEditActivityDialogProps> = ({
   isOpen,
   onDialogClose,
+  activity,
 }) => {
   const { data: categoryData, isLoading: isLoadingCategory } =
     useGetCategoriesQuery();
@@ -35,10 +40,18 @@ const AddActivityDialog: FC<TAddActivityDialogProps> = ({
   const {
     formState,
     handleFormStateUpdate,
-    isLoadingPostActivity,
+    isLoadingPutActivity,
     onSubmit,
     errorFieldsSet,
-  } = useAddActivity(onDialogClose);
+  } = useEditActivity(activity);
+
+  const {
+    onDisplayDeleteConfirmation,
+    isDeleteWarningShown,
+    onDeleteCancel,
+    onDelete,
+    isDeleteLoading,
+  } = useDeleteActivity(activity.id, onDialogClose);
 
   const handleFormChange = useCallback(
     (e: THandleFormChangeEvent) => {
@@ -56,9 +69,27 @@ const AddActivityDialog: FC<TAddActivityDialogProps> = ({
     [handleFormStateUpdate]
   );
 
+  const handleSaveClick = useCallback(() => {
+    onSubmit()?.then(() => {
+      onDialogClose();
+    });
+  }, [onDialogClose, onSubmit]);
+
+  if (isDeleteWarningShown) {
+    return (
+      <Dialog open={isOpen}>
+        <DeleteConfirmation
+          onCancel={onDeleteCancel}
+          onDelete={onDelete}
+          isDeleteLoading={isDeleteLoading}
+        />
+      </Dialog>
+    );
+  }
+
   return (
     <Dialog open={isOpen}>
-      <DialogTitle>Add activity</DialogTitle>
+      <DialogTitle>Edit activity</DialogTitle>
       <StyledDialogContent>
         <StyledDateTimePicker
           label="Date and time of activity"
@@ -71,8 +102,8 @@ const AddActivityDialog: FC<TAddActivityDialogProps> = ({
           <Select
             labelId="category-label"
             id="category-label"
-            name="category"
-            value={formState.category}
+            name="categoryid"
+            value={formState.categoryid}
             onChange={handleFormChange}
             label="Category"
             disabled={isLoadingCategory}
@@ -115,20 +146,29 @@ const AddActivityDialog: FC<TAddActivityDialogProps> = ({
         />
       </StyledDialogContent>
       <StyledDialogActions>
-        <Button type="submit" onClick={onDialogClose}>
-          Cancel
-        </Button>
         <Button
           type="submit"
-          variant="contained"
-          onClick={onSubmit}
-          loading={isLoadingPostActivity}
+          color="error"
+          onClick={onDisplayDeleteConfirmation}
         >
-          Add activity
+          Delete
         </Button>
+        <CancelSaveButtonsContainer>
+          <Button type="submit" onClick={onDialogClose}>
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            variant="contained"
+            onClick={handleSaveClick}
+            loading={isLoadingPutActivity}
+          >
+            Save
+          </Button>
+        </CancelSaveButtonsContainer>
       </StyledDialogActions>
     </Dialog>
   );
 };
 
-export default AddActivityDialog;
+export default EditActivityDialog;
